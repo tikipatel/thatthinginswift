@@ -22,11 +22,15 @@ if (!jsonError) {
 Lots of boilerplate, but still pretty simple. Now the same, in Swift:
 
 {{< highlight swift >}}
-let data: NSData = ...some data loaded...
-let jsonError: NSError?
-let decodedJson = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: &jsonError!) as Dictionary<String, AnyObject>
-if !jsonError {
-  print(decodedJson["title"])
+let jsonData: NSData = ...some data loaded...
+do {
+  if let decodedJSON = try NSJSONSerialization.JSONObjectWithData(jsonData, options: .MutableContainers) as? [String : AnyObject] {
+    print(decodedJSON)
+  } else {
+    print("There was an error trying to decode the jsonData")
+  }
+} catch (let error as NSError) {
+  print(error.localizedDescription)
 }
 {{< /highlight >}}
 
